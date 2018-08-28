@@ -10,6 +10,9 @@
 6. [Service Configuration](#Service-Configuration)
 7. [Service Setup](#Service-Setup)
     * [AWS](setup_AWS.md)
+8. [Local Testing](#Local-Testing)
+    * [Config](#Config)
+    * [Run](#Run)
 
 ## Description
 
@@ -144,4 +147,94 @@ The best way to setup Mordo is [Terraform](https://www.terraform.io/downloads.ht
 
 Terraform install resources is located at `./terraform`.
 
-* [AWS](setup_AWS.md)
+* [AWS](doc/setup_AWS.md)
+
+## Local Testing
+
+### Config
+
+In order to run locally you need to create S3 bucket for resulting images and set `AWS_S3_BUCKET_PROCESSED` in `.env`.
+
+Also You need to fill `.envlocal.sample` with `AWS_ACCESS_KEY` and `AWS_SECRET_KEY`. This user must have next permissions:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "1",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObjectTagging",
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::AWS_S3_BUCKET_PROCESSED/*",
+                "arn:aws:s3:::AWS_S3_BUCKET_PROCESSED"
+            ]
+        },
+        {
+            "Sid": "2",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::AWS_S3_BUCKET_WITH_IMAGES/*",
+                "arn:aws:s3:::AWS_S3_BUCKET_WITH_IMAGES"
+            ]
+        },
+        {
+            "Sid": "3",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+Modify next blocks of `doc/apigw_event/blank.json`
+
+_Note: You can `doc/apigw_event/*` are events that **AWS API Gateway** passes to **AWS Lambda**. Thay are passed to local container which emulates **AWS Lambda** behaviour._
+
+```
+  "queryStringParameters": {
+    "width": "1000"
+  },
+```
+
+and
+
+```
+  "stageVariables": {
+    "baz": "qux",
+    "s3_bucket": "AWS_S3_BUCKET_WITH_IMAGES",
+    "s3_bucket_region": "us-west-1"
+  },
+```
+
+### Run
+
+```
+# sh scripts/build_linux.sh aws 1>/dev/null
+
+# cat doc/apigw_event/blank.json |  docker run --rm -i -v "$PWD"/pkg:/var/task --env-file=.envlocal --env-file=.env lambci/lambda:go1.x mordo 2>&1
+```
+
+or
+
+```
+sh scripts/run_aws_local.sh
+```

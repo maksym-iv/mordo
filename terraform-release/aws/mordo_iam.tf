@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "mordo_lambda_s3" {
       "s3:PutObject",
       "s3:GetObject",
       "s3:ListBucket",
-      "s3:PutObjectAcl",
+      # "s3:PutObjectAcl",
     ]
 
     resources = [
