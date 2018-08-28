@@ -1,0 +1,68 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "1",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:DELETE",
+                "apigateway:GET",
+                "apigateway:HEAD",
+                "apigateway:OPTIONS",
+                "apigateway:PATCH",
+                "apigateway:POST",
+                "apigateway:PUT",
+                "cloudfront:*",
+                "lambda:CreateEventSourceMapping",
+                "lambda:CreateFunction",
+                "lambda:DeleteEventSourceMapping",
+                "lambda:GetAccountSettings",
+                "lambda:GetEventSourceMapping",
+                "lambda:ListEventSourceMappings",
+                "lambda:ListFunctions",
+                "lambda:UpdateEventSourceMapping",
+                "s3:ListAllMyBuckets",
+                "s3:HeadBucket",
+                "s3:ListBucket",
+                "s3:Get*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "2",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole*",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListInstanceProfilesForRole",
+                "iam:UpdateRoleDescription",
+                "iam:DeleteRolePermissionsBoundary",
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:UpdateRole",
+                "iam:PassRole",
+                "iam:PutRolePolicy",
+                "iam:AttachRolePolicy",
+                "iam:DetachRolePolicy",
+                "iam:DeleteRolePolicy"
+            ],
+            "Resource": "arn:aws:iam::*:role/*mordo-lambda"
+        },
+        {
+            "Sid": "3",
+            "Effect": "Allow",
+            "Action": "lambda:*",
+            "Resource": "arn:aws:lambda:*:*:function:*-mordo"
+        },
+        {
+            "Sid": "4",
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::${prefix}-${s3_bucket_prc}",
+                "arn:aws:s3:::${prefix}-${s3_bucket_deploy}",
+                "arn:aws:s3:::${prefix}-{s3_bucket_deploy}/*"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+aws_access_key = ""
+aws_secret_key = ""
+aws_region = "us-west-1"
+
+s3_bucket_prc_lifecycle_expire = "3"
+
+cf_price_class = "PriceClass_200"
+cf_min_ttl = 0
+cf_default_ttl = 87000

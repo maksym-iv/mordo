@@ -1,0 +1,32 @@
+# .vscode/
+# vendor/
+# build/
+# scripts/
+# tmp/
+
+# # test data
+# tests
+# doc
+
+# # debug
+# debug
+# debug.test
+
+# # binaries
+# mordo
+# pkg
+
+# terraform
+
+# # OS
+# .DS_Store
+
+*
+!Gopkg.lock
+!Gopkg.toml
+!base
+!config
+!function
+!helpers
+!img
+!io

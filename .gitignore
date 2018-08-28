@@ -1,0 +1,41 @@
+# OS, IDE, Local
+.DS_Store
+.vscode
+.envlocal
+
+# PGK, Build
+pkg/
+build/
+lambda/build/
+/release/
+/*.zip
+/*.tgz
+/*.tar.gz
+
+# Dependency
+vendor/
+
+# TMP
+tmp/
+*.log
+
+# Debug
+debug
+debug.test
+
+# Tests
+tests/images/io/*
+cover.out
+cover.html
+
+# Terraform
+.terraform.tfstate.lock.info
+.terraform
+terraform-release/**/terraform.tfstate*
+terraform-release/**/_vars.auto.tfvars
+
+terraform-demo/**/_vars.auto.tfvars
+
+# Python?
+.venv
+
