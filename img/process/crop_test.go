@@ -14,9 +14,9 @@ import (
 func Test_ProcessCrop(t *testing.T) {
 	testCases := []struct {
 		name                     string
-		img                      *[]byte
+		img                      []byte
 		width, height, left, top int
-		want                     *[]byte
+		want                     []byte
 	}{
 		{
 			name:   "origin_light_2k.jpg",
@@ -103,7 +103,7 @@ func Test_ProcessCrop(t *testing.T) {
 				t.Error("Cropped image is not eq with test image")
 				t.Error("Will write images to ../../tmp/ for further checks")
 				p := fmt.Sprintf("../../tmp/%s", tc.name)
-				ioutil.WriteFile(p, *got, 0644)
+				ioutil.WriteFile(p, got, 0644)
 			}
 		})
 
@@ -113,7 +113,7 @@ func Test_ProcessCrop(t *testing.T) {
 func Benchmark_ProcessCrop(b *testing.B) {
 	testCases := []struct {
 		name                     string
-		img                      *[]byte
+		img                      []byte
 		width, height, left, top int
 	}{
 		{

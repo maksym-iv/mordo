@@ -4,11 +4,11 @@ package base
 type Img struct {
 	Path    string
 	DirPath string
-	Buff    *[]byte
+	Buff    []byte
 }
 
 // UpdateBuff - update image with new buffer
-func (i *Img) UpdateBuff(b *[]byte) {
+func (i *Img) UpdateBuff(b []byte) {
 	i.Buff = b
 }
 

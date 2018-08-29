@@ -55,7 +55,7 @@ func Test_Read(t *testing.T) {
 		name    string
 		bucket  string
 		imgPath string
-		want    *[]byte
+		want    []byte
 	}{
 		{
 			name:    "origin_2k.jpg",
@@ -231,9 +231,9 @@ func Test_Write(t *testing.T) {
 	testCases := []struct {
 		name    string
 		bucket  string
-		imgBuff *[]byte
+		imgBuff []byte
 		imgPath string
-		want    *[]byte
+		want    []byte
 	}{
 		{
 			name:    "origin_2k.jpg",

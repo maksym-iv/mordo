@@ -90,7 +90,7 @@ func (i *S3Img) IsExist(bucket string, imgpath string) (bool, error) {
 
 // SetContentType - set object Content-Type according to i.Buff
 func (i *S3Img) SetContentType() {
-	ct := http.DetectContentType(*i.Buff)
+	ct := http.DetectContentType(i.Buff)
 	i.ContentType = ct
 }
 
@@ -126,9 +126,9 @@ func (i *S3Img) Read() error {
 	}
 
 	emptyBuf := make([]byte, int(*result.ContentLength))
-	i.UpdateBuff(&emptyBuf)
+	i.UpdateBuff(emptyBuf)
 
-	_, err = io.ReadFull(result.Body, *i.Buff)
+	_, err = io.ReadFull(result.Body, i.Buff)
 	if err != nil {
 		return fmt.Errorf("%v", err)
 	}
@@ -139,7 +139,7 @@ func (i *S3Img) Read() error {
 func (i *S3Img) Write() error {
 	tags := "processed=true"
 	input := &s3.PutObjectInput{
-		Body:        aws.ReadSeekCloser(bytes.NewReader(*i.Buff)),
+		Body:        aws.ReadSeekCloser(bytes.NewReader(i.Buff)),
 		Tagging:     &tags,
 		ACL:         aws.String("public-read"),
 		Bucket:      aws.String(config.AWSConfig.S3BucketProcessed),

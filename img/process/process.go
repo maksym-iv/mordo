@@ -28,8 +28,8 @@ type applied struct {
 }
 
 // New - just create new *bimg.Image
-func New(buff *[]byte) (*Image, error) {
-	img, err := vips.NewImageFromBuffer(*buff)
+func New(buff []byte) (*Image, error) {
+	img, err := vips.NewImageFromBuffer(buff)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func New(buff *[]byte) (*Image, error) {
 }
 
 // Process - process *bimg.Image with *bimg.Options
-func (i *Image) Process() (*[]byte, *string, error) {
+func (i *Image) Process() ([]byte, *string, error) {
 	exportParams := &vips.ExportParams{
 		Quality:     config.ImageConfig.Quality,
 		Compression: config.ImageConfig.Compression,
@@ -55,5 +55,5 @@ func (i *Image) Process() (*[]byte, *string, error) {
 
 	ext := imgExt.OutputExt()
 
-	return &buff, &ext, nil
+	return buff, &ext, nil
 }

@@ -13,7 +13,7 @@ func Test_process(t *testing.T) {
 		image     string
 		qs        map[string]string
 		stageVars map[string]string
-		want      *[]byte
+		want      []byte
 	}{
 		{
 			name:  "origin_2k.jpg",
@@ -28,7 +28,7 @@ func Test_process(t *testing.T) {
 				// "sc_y": "400",
 			},
 			stageVars: map[string]string{
-				"s3_bucket":        "dev-mordo-images",
+				"s3_bucket":        "demo-mordo-images",
 				"s3_bucket_region": "us-west-1",
 			},
 			// want:    helpers.ReadToBuff("../../tests/io/s3/read/origin_2k.jpg"),

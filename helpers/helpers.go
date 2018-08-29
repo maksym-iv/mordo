@@ -15,12 +15,12 @@ import (
 // 	return fallback
 // }
 
-func ReadToBuff(p string) *[]byte {
+func ReadToBuff(p string) []byte {
 	b, _ := ioutil.ReadFile(p)
 	// if err != nil {
 	// 	panic(err)
 	// }
-	return &b
+	return b
 }
 
 func ContainsString(arr []string, elem string) bool {

@@ -101,7 +101,7 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 				"Content-Type":  s3Img.ContentType,
 				"Cache-Control": fmt.Sprintf("max-age=%d", config.Cache.MaxAge),
 			},
-			Body:            base64.StdEncoding.EncodeToString(*s3Img.Buff),
+			Body:            base64.StdEncoding.EncodeToString(s3Img.Buff),
 			IsBase64Encoded: true,
 		}
 		return r, nil
@@ -223,7 +223,7 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 			"Content-Type":  s3Img.ContentType,
 			"Cache-Control": fmt.Sprintf("max-age=%d", config.Cache.MaxAge),
 		},
-		Body:            base64.StdEncoding.EncodeToString(*s3Img.Buff),
+		Body:            base64.StdEncoding.EncodeToString(s3Img.Buff),
 		IsBase64Encoded: true,
 	}
 	return r, nil
