@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"gitlab.com/doctor-strange/mordo/helpers"
+	"github.com/xmackex/mordo/helpers"
 )
 
 func Test_ProcessResize(t *testing.T) {

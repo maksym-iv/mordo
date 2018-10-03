@@ -14,8 +14,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 
-	"gitlab.com/doctor-strange/mordo/base"
-	c "gitlab.com/doctor-strange/mordo/config"
+	"github.com/xmackex/mordo/base"
+	c "github.com/xmackex/mordo/config"
 )
 
 var (

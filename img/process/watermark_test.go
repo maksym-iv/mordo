@@ -11,7 +11,7 @@ import (
 	// "github.com/xmackex/bimg"
 	// // "gopkg.in/h2non/bimg.v1"
 
-	"gitlab.com/doctor-strange/mordo/helpers"
+	"github.com/xmackex/mordo/helpers"
 )
 
 func Test_ProcessWatermark(t *testing.T) {

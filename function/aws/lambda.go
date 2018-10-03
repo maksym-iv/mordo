@@ -10,9 +10,9 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"go.uber.org/zap"
 
-	c "gitlab.com/doctor-strange/mordo/config"
-	p "gitlab.com/doctor-strange/mordo/img/process"
-	"gitlab.com/doctor-strange/mordo/io/s3"
+	c "github.com/xmackex/mordo/config"
+	p "github.com/xmackex/mordo/img/process"
+	"github.com/xmackex/mordo/io/s3"
 )
 
 var (

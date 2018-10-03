@@ -22,15 +22,15 @@ RUN ldconfig
 RUN rm -rf /tmp/build/vips-8.6.5.tar.gz
 
 # Build lambda
-ADD ./Gopkg.toml /go/src/gitlab.com/doctor-strange/mordo/Gopkg.toml
-ADD ./Gopkg.lock /go/src/gitlab.com/doctor-strange/mordo/Gopkg.lock
-WORKDIR /go/src/gitlab.com/doctor-strange/mordo
+ADD ./Gopkg.toml /go/src/github.com/xmackex/mordo/Gopkg.toml
+ADD ./Gopkg.lock /go/src/github.com/xmackex/mordo/Gopkg.lock
+WORKDIR /go/src/github.com/xmackex/mordo
 RUN dep ensure --vendor-only
 
-ADD ./ /go/src/gitlab.com/doctor-strange/mordo
+ADD ./ /go/src/github.com/xmackex/mordo
 
 # For function
-WORKDIR /go/src/gitlab.com/doctor-strange/mordo/function/${PLATFORM}
+WORKDIR /go/src/github.com/xmackex/mordo/function/${PLATFORM}
 
 ENV CGO_ENABLED=1
 

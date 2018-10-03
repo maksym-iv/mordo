@@ -3,7 +3,7 @@ package process
 import (
 	"github.com/davidbyttow/govips/pkg/vips"
 
-	c "gitlab.com/doctor-strange/mordo/config"
+	c "github.com/xmackex/mordo/config"
 )
 
 var (

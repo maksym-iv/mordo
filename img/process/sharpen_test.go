@@ -10,7 +10,7 @@ import (
 	"reflect"
 	"testing"
 
-	"gitlab.com/doctor-strange/mordo/helpers"
+	"github.com/xmackex/mordo/helpers"
 )
 
 func Test_ProcessSharpen(t *testing.T) {

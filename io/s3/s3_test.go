@@ -7,9 +7,9 @@ import (
 	// "os"
 	// "strconv"
 	"testing"
-	// "gitlab.com/doctor-strange/mordo/base"
+	// "github.com/xmackex/mordo/base"
 
-	"gitlab.com/doctor-strange/mordo/helpers"
+	"github.com/xmackex/mordo/helpers"
 )
 
 func Benchmark_NewImg(b *testing.B) {
