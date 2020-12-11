@@ -1,26 +1,73 @@
-FROM golang:latest
+FROM amazonlinux:2 as vips
 
-ARG PLATFORM
+# general build stuff
+RUN yum update -y \
+    && yum groupinstall -y "Development Tools" \
+    && yum install -y wget tar
+
+# libvips needs libwebp 0.5 or later and the one on amazonlinux2 is 0.3.0, so
+# we have to build it ourselves
+
+# packages needed by libwebp
+RUN yum install -y \
+    libjpeg-devel \
+    libpng-devel \
+    libtiff-devel \
+    libgif-devel 
+
+# stuff we need to build our own libvips ... this is a pretty basic selection
+# of dependencies, you'll want to adjust these
+# dzsave needs libgsf
+RUN yum install -y \
+    libpng-devel \
+    glib2-devel \
+    libjpeg-devel \
+    expat-devel \
+    zlib-devel \
+    orc-devel \
+    lcms2-devel \
+    libexif-devel \
+    libgsf-devel
+
+# openslide is in epel -- extra packages for enterprise linux
+RUN yum install -y \
+    https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN yum install -y \
+    openslide-devel 
+
+# non-standard stuff we build from source goes here
+ENV VIPSHOME /usr/local/vips
+ENV PKG_CONFIG_PATH $VIPSHOME/lib/pkgconfig
+
+ARG WEBP_VERSION=1.0.2
+ARG WEBP_URL=https://storage.googleapis.com/downloads.webmproject.org/releases/webp
+
+RUN cd /usr/local/src \
+    && wget ${WEBP_URL}/libwebp-${WEBP_VERSION}.tar.gz \
+    && tar xzf libwebp-${WEBP_VERSION}.tar.gz \
+    && cd libwebp-${WEBP_VERSION} \
+    && ./configure --enable-libwebpmux --enable-libwebpdemux \
+    --prefix=$VIPSHOME \
+    && make V=0 \
+    && make install
+
 ARG VIPS_VERSION=8.10.2
-ARG APP_ROOT=/app
+ARG VIPS_URL=https://github.com/libvips/libvips/releases/download
 
-RUN echo 'alias ll="ls -la"' >> /root/.bashrc
-RUN apt-get update
+RUN cd /usr/local/src \
+    && wget ${VIPS_URL}/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.gz \
+    && tar xzf vips-${VIPS_VERSION}.tar.gz \
+    && cd vips-${VIPS_VERSION} \
+    && ./configure --prefix=$VIPSHOME \
+    && make V=0 \
+    && make install
 
-RUN apt-get install -y automake build-essential git \
-  libglib2.0-dev libjpeg62-turbo-dev libpng-dev \
-  gtk-doc-tools libexpat1-dev libgif-dev zip
+RUN ls $VIPSHOME/lib
 
-RUN go get -u github.com/golang/dep/cmd/dep
+# Builder
+FROM vips as builder
 
-WORKDIR /tmp/build
-RUN wget -c https://github.com/libvips/libvips/releases/download/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.gz
-RUN tar xfvpz vips-${VIPS_VERSION}.tar.gz
-WORKDIR /tmp/build/vips-${VIPS_VERSION}
-RUN ./configure
-RUN make
-RUN ldconfig
-RUN rm -rf /tmp/build/vips-${VIPS_VERSION}.tar.gz
+RUN yum -y install golang
 
 # Build lambda deps
 WORKDIR ${APP_ROOT}
@@ -32,14 +79,14 @@ ADD ./ /app
 
 # Build more lambda deps
 WORKDIR ${APP_ROOT}/function/${PLATFORM}
+RUN mkdir ${APP_ROOT}/function/${PLATFORM}/lib
 
-ENV CGO_ENABLED=1
+RUN cp /usr/lib64/libpng* ./lib/
+RUN cp /usr/lib64/libjpeg.* ./lib/
+RUN cp /usr/lib64/libtiff.* ./lib/
+RUN cp /usr/lib64/libgif.* ./lib/
 
-RUN mkdir lib
-RUN cp /usr/lib/x86_64-linux-gnu/libpng* ./lib/
-RUN cp /usr/lib/x86_64-linux-gnu/libjpeg.* ./lib/
-RUN cp /usr/lib/x86_64-linux-gnu/libgif.* ./lib/
-RUN cp -R /tmp/build/vips-${VIPS_VERSION}/libvips/.libs/* ./lib/
+RUN cp -r /usr/local/src/vips-8.10.2/libvips/.libs/* ${APP_ROOT}/function/${PLATFORM}/lib
 
 ENV LD_LIBRARY_PATH="./lib"
 ENV PKG_CONFIG_PATH="/tmp/build/vips-${VIPS_VERSION}"
@@ -47,5 +94,7 @@ ENV CGO_CFLAGS="-I/tmp/build/vips-${VIPS_VERSION}/libvips/include"
 ENV CGO_LDFLAGS="-L/tmp/build/vips-${VIPS_VERSION}/libvips/.libs -lvips"
 
 # Build lambda
+ENV CGO_ENABLED=1
 RUN go build -a -tags release -o mordo
-RUN ldd mordo
+# RUN ldd mordo
+ENTRYPOINT ["bash"]

@@ -1,0 +1,76 @@
+# FROM lambci/lambda:build-go1.x
+# FROM amazon/aws-lambda-go
+FROM public.ecr.aws/lambda/provided:al2
+
+ARG PLATFORM=aws
+ARG VIPS_VERSION=8.10.2
+ARG APP_ROOT=/app
+
+RUN echo 'alias ll="ls -la"' >> /root/.bashrc
+
+# general build stuff
+RUN yum update -y \
+    && yum groupinstall -y "Development Tools" \
+    && yum install -y wget tar golang
+
+# packages needed by libwebp
+RUN yum install -y \
+    libjpeg-devel \
+    libpng-devel \
+    libtiff-devel \
+    libgif-devel 
+
+# stuff we need to build our own libvips ... this is a pretty basic selection
+# of dependencies, you'll want to adjust these
+# dzsave needs libgsf
+RUN yum install -y \
+    libpng-devel \
+    glib2-devel \
+    libjpeg-devel \
+    expat-devel \
+    zlib-devel \
+    orc-devel \
+    lcms2-devel \
+    libexif-devel \
+    libgsf-devel
+
+WORKDIR /tmp/build
+RUN wget -c https://github.com/libvips/libvips/releases/download/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.gz
+RUN tar xfvpz vips-${VIPS_VERSION}.tar.gz
+WORKDIR /tmp/build/vips-${VIPS_VERSION}
+RUN ./configure 
+RUN make -j4
+RUN make install
+RUN rm -rf /tmp/build/vips-${VIPS_VERSION}.tar.gz
+
+# Build lambda deps
+WORKDIR ${APP_ROOT}
+ADD ./go.mod ${APP_ROOT}
+ADD ./go.sum ${APP_ROOT}
+RUN go mod download
+
+ADD ./ /app
+
+# Build more lambda deps
+WORKDIR ${APP_ROOT}/function/${PLATFORM}
+RUN mkdir lib
+ENV PKG_CONFIG_PATH="/tmp/build/vips-${VIPS_VERSION}"
+
+RUN rm /tmp/build/vips-${VIPS_VERSION}/libvips/.libs/libvips.la
+RUN cp /tmp/build/vips-${VIPS_VERSION}/libvips/libvips.la /tmp/build/vips-${VIPS_VERSION}/libvips/.libs/
+RUN cp -R /tmp/build/vips-${VIPS_VERSION}/libvips/.libs/* ./lib/
+
+ENV LD_LIBRARY_PATH="./lib"
+ENV PKG_CONFIG_PATH="/tmp/build/vips-${VIPS_VERSION}"
+ENV CGO_CFLAGS="-I/tmp/build/vips-${VIPS_VERSION}/libvips/include"
+ENV CGO_LDFLAGS="-L/tmp/build/vips-${VIPS_VERSION}/libvips/.libs -lvips"
+
+ADD tests/watermark.png ./
+
+# Build lambda
+ENV CGO_ENABLED=1
+RUN go build -a -tags release -o mordo
+
+# https://docs.aws.amazon.com/lambda/latest/dg/go-image.html#go-image-base
+RUN go env -w GOPROXY=direct
+ENTRYPOINT [ "/app/function/aws/mordo" ]    

@@ -37,7 +37,6 @@ type Watermark struct {
 
 func newQs(image string, qs map[string]string) (*QS, error) {
 	result := &QS{}
-	result.Image = image
 
 	config := &ms.DecoderConfig{
 		WeaklyTypedInput: true,
@@ -53,6 +52,12 @@ func newQs(image string, qs map[string]string) (*QS, error) {
 		return nil, err
 	}
 
+	// We need this, because is `qs` is nil, `decoder.Decode(qs)` will dereference `result`
+	if result == nil {
+		result = &QS{}
+	}
+
+	result.Image = image
 	return result, nil
 }
 

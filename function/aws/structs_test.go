@@ -35,6 +35,14 @@ func Test_newQs(t *testing.T) {
 				Sharpen:   true,
 			},
 		},
+		{
+			name:  "origin_2k.jpg nil",
+			image: "origin_2k.jpg",
+			qs:    nil,
+			want: &QS{
+				Image: "origin_2k.jpg",
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -81,14 +89,19 @@ func Test_hashQss(t *testing.T) {
 			},
 			want: "prc_7787e2d6bb5605e5d1e2ee2ae64057f087e56343_origin_2k.jpg",
 		},
+		{
+			name: "origin_2k.jpg",
+			qss: &QS{
+				Image: "origin_2k.jpg",
+			},
+			want: "prc_83ff8f1539340c8b7b8408159b8cd6c7415b2dd8_origin_2k.jpg",
+		},
 	}
 
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			// got := tc.qss.hashQss()
-			// t.Log(got)
 			if got := tc.qss.hashPath(); !reflect.DeepEqual(got, tc.want) {
 				t.Errorf("Sha1 hashes differ. Got: %s, Want: %s", got, tc.want)
 			}

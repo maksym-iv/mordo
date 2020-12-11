@@ -49,15 +49,17 @@ func timer(timeStart time.Time, where string) {
 
 func process(image string, qs map[string]string, stageVars map[string]string) (*events.APIGatewayProxyResponse, *gwError) {
 	timeStart := time.Now()
+	log.Infof("Will process %s image", image)
 
 	vips.Startup(&vips.Config{
-		ConcurrencyLevel: 4,
-		MaxCacheFiles:    100,
-		MaxCacheMem:      config.MaxMem,
-		MaxCacheSize:     500,
-		ReportLeaks:      false,
-		CacheTrace:       false,
-		CollectStats:     false,
+		ConcurrencyLevel: 1,
+		MaxCacheFiles:    0,
+		MaxCacheMem:      0,
+		// MaxCacheMem:      config.MaxMem,
+		MaxCacheSize: 0,
+		ReportLeaks:  config.Debug,
+		CacheTrace:   config.Debug,
+		CollectStats: config.Debug,
 	})
 
 	qss, err := newQs(image, qs)
@@ -114,10 +116,9 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 		r := response(e.ErrorJSON(), 500, map[string]string{"Content-Type": "application/json"})
 		return r, e
 	} else if !ok {
-		e := newErr("Initial image doesn't exist")
+		e := newErr(fmt.Sprintf("Initial image %s/%s doesn't exist", s3Img.Path, s3Img.Bucket))
 		log.Error(err)
-		// TODO: maybe 404?
-		r := response(e.ErrorJSON(), 500, map[string]string{"Content-Type": "application/json"})
+		r := response(e.ErrorJSON(), 404, map[string]string{"Content-Type": "application/json"})
 		return r, e
 	}
 
@@ -125,8 +126,8 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 
 	// START transform
 	s3Img.Read()
-
 	timer(timeStart, "Read") // DEBUGG
+
 	img, err := p.New(s3Img.Buff)
 	if err != nil {
 		log.Error(err)
@@ -136,6 +137,7 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 	}
 
 	if qss.Crop.Width != 0 && qss.Crop.Height != 0 {
+		log.Infof("Will Crop: %s", s3Img.Path)
 		if err := img.Crop(qss.Crop.Left, qss.Crop.Top, qss.Crop.Width, qss.Crop.Height); err != nil {
 			log.Error(err)
 			e := newErr(err.Error())
@@ -143,9 +145,10 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 			return r, e
 		}
 	}
-
 	timer(timeStart, "Crop") // DEBUGG
+
 	if qss.Resize.Width != 0 {
+		log.Infof("Will Resize: %s", s3Img.Path)
 		if err := img.Resize("width", qss.Resize.Width); err != nil {
 			log.Error(err)
 			e := newErr(err.Error())
@@ -153,6 +156,7 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 			return r, e
 		}
 	} else if qss.Resize.Height != 0 {
+		log.Infof("Will Resize: %s", s3Img.Path)
 		if err := img.Resize("height", qss.Resize.Height); err != nil {
 			log.Error(err)
 			e := newErr(err.Error())
@@ -160,13 +164,14 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 			return r, e
 		}
 	}
-
 	timer(timeStart, "Resize") // DEBUGG
+
 	if qss.DPR != 0 {
+		log.Infof("Will DPR: %s", s3Img.Path)
 		img.DPR(qss.DPR)
 	}
-
 	timer(timeStart, "DPR") // DEBUGG
+
 	if qss.Sharpen {
 		log.Infof("Will sharpen: %s", s3Img.Path)
 		// http://jcupitt.github.io/libvips/API/current/libvips-convolution.html#vips-sharpen
@@ -177,8 +182,8 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 			return r, e
 		}
 	}
-
 	timer(timeStart, "Sharpen") // DEBUGG
+
 	if qss.Watermark.WX != "" && qss.Watermark.WY != "" && config.WatermarkEnabled {
 		var err error
 		if err = img.Watermark(qss.Watermark.WX, qss.Watermark.WY, qss.Watermark.WS); err != nil {
@@ -188,9 +193,9 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 			return r, e
 		}
 	}
+	timer(timeStart, "Watermark") // DEBUGG
 
 	// END transform
-	timer(timeStart, "Watermark") // DEBUGG
 	buf, _, err := img.Process()
 	if err != nil {
 		log.Error(err)
@@ -201,8 +206,11 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 	timer(timeStart, "Process") // DEBUGG
 
 	s3Img.UpdatePath(newPath)
+	s3Img.UpdateBucket(config.AWSConfig.S3BucketProcessed)
 	s3Img.UpdateBuff(buf)
 	timer(timeStart, "UpdateBuff") // DEBUGG
+
+	log.Infof("Writing image %s to bucket %s", s3Img.Path, s3Img.Bucket)
 	if err := s3Img.Write(); err != nil {
 		log.Error(err)
 		e := newErr(err.Error())

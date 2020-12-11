@@ -1,8 +1,6 @@
 package process
 
 import (
-	"math"
-
 	"github.com/davidbyttow/govips/v2/vips"
 )
 
@@ -58,10 +56,10 @@ func (i *Image) Watermark(xString string, yString string, scale float64) error {
 	// scale watermark according to config.WatermarkConfig.Scale.
 	// TODO: put `imgOverlay.Resize` out of `if` scope
 	if scale != 0 {
-		s := math.Round(float64(config.WatermarkConfig.Scale * scale))
+		s := float64(config.WatermarkConfig.Scale) * float64(scale)
 		imgOverlay.Resize(s, vips.KernelAuto)
 	} else {
-		s := math.Round(float64(config.WatermarkConfig.Scale))
+		s := float64(config.WatermarkConfig.Scale)
 		imgOverlay.Resize(s, vips.KernelAuto)
 	}
 

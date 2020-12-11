@@ -72,7 +72,7 @@ func NewImg(bucket string, imgPath string, region string) (*S3Img, error) {
 	return img, nil
 }
 
-// IsExist - check if imgPath exist in bucket
+// IsExist - check if imgPath exist in the bucket
 func (i *S3Img) IsExist(bucket string, imgPath string) (bool, error) {
 	headInput := &s3.HeadObjectInput{
 		Bucket: aws.String(bucket),
@@ -94,16 +94,13 @@ func (i *S3Img) SetContentType() {
 	i.ContentType = ct
 }
 
-// UpdateBucket - set object Content-Type according to i.Buff
+// UpdateBucket - set bucket name in image
 func (i *S3Img) UpdateBucket(bucket string) {
 	i.Bucket = bucket
 }
 
 // Read - read image from S3 and update i.Buff with image buffer
 func (i *S3Img) Read() error {
-	// sess = session.Must(session.NewSession())
-	// svc = s3.New(sess, aws.NewConfig().WithRegion(i.Region))
-
 	input := &s3.GetObjectInput{
 		Bucket: aws.String(i.Bucket),
 		Key:    aws.String(i.Path),

@@ -30,9 +30,8 @@ Next image operations are supported:
 1. Resize (with preserving aspect ratio)
 2. DPR (Dual Pixel Ratio)
 3. Crop
-4. Smart Crop
-5. Watermark
-6. Sharpen
+4. Watermark
+5. Sharpen
 
 ## Platforms
 

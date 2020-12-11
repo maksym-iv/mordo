@@ -1,0 +1,133 @@
+timestamp,message
+1607689148398,"START RequestId: 6ddbce60-6548-4ca7-b5d4-f03cf3f4923b Version: $LATEST
+"
+1607689148430,"2020-12-11T12:19:08.399Z	INFO	aws/lambda.go:239	Processing Lambda request 7fcb2af9-2b3b-4831-886e-9fd198614b53
+"
+1607689148430,"2020-12-11T12:19:08.411Z	INFO	aws/lambda.go:52	Will process origin_2k.jpg image
+"
+1607689148653,"2020/12/11 12:19:08 [govips.info] vips 8.10.2 started with concurrency=1 cache_max_files=0 cache_max_mem=0 cache_max=0
+"
+1607689148692,"2020/12/11 12:19:08 [govips.info] registered image type loader type=png
+"
+1607689148693,"2020/12/11 12:19:08 [govips.info] registered image type loader type=jpeg
+"
+1607689148693,"2020/12/11 12:19:08 [govips.info] registered image type loader type=gif
+"
+1607689150232,"2020-12-11T12:19:10.232Z	DEBUG	aws/lambda.go:47	Passed after Read: 389.723618ms
+"
+1607689150252,"2020-12-11T12:19:10.251Z	DEBUG	aws/lambda.go:47	Passed after Crop: 409.318481ms
+"
+1607689150252,"2020-12-11T12:19:10.251Z	DEBUG	aws/lambda.go:47	Passed after Resize: 409.602702ms
+"
+1607689150252,"2020-12-11T12:19:10.251Z	DEBUG	aws/lambda.go:47	Passed after DPR: 409.611542ms
+"
+1607689150252,"2020-12-11T12:19:10.251Z	DEBUG	aws/lambda.go:47	Passed after Sharpen: 409.617121ms
+"
+1607689150252,"2020-12-11T12:19:10.251Z	DEBUG	aws/lambda.go:47	Passed after Watermark: 409.621944ms
+"
+1607689152414,"2020-12-11T12:19:12.413Z	DEBUG	aws/lambda.go:47	Passed after Process: 2.57156109s
+"
+1607689152414,"2020-12-11T12:19:12.413Z	DEBUG	aws/lambda.go:47	Passed after UpdateBuff: 2.571616596s
+"
+1607689152414,"2020-12-11T12:19:12.414Z	INFO	aws/lambda.go:213	Writing image prc_9635ba0107338962496ae3646da9f07c3379ac4c_origin_2k.jpg to bucket ftmt-int-mordo-prc
+"
+1607689152701,"2020-12-11T12:19:12.701Z	DEBUG	aws/lambda.go:47	Passed after Write: 2.858934589s
+"
+1607689152850,"/var/task/mordo: symbol lookup error: /var/task/mordo: undefined symbol: g_type_check_instance_is_fundamentally_a
+"
+1607689152853,"2020/12/11 12:19:12 unexpected EOF
+"
+1607689152853,"2020/12/11 12:19:12 unexpected EOF
+"
+1607689152923,"END RequestId: 6ddbce60-6548-4ca7-b5d4-f03cf3f4923b
+"
+1607689152923,"REPORT RequestId: 6ddbce60-6548-4ca7-b5d4-f03cf3f4923b	Duration: 4524.77 ms	Billed Duration: 4525 ms	Memory Size: 128 MB	Max Memory Used: 88 MB	Init Duration: 156.84 ms	
+"
+1607689152923,"RequestId: 6ddbce60-6548-4ca7-b5d4-f03cf3f4923b Process exited before completing request
+
+"
+1607689157381,"START RequestId: 46fef75f-ebf0-498e-a58e-c4f2c6e9f4f8 Version: $LATEST
+"
+1607689157387,"2020-12-11T12:19:17.385Z	INFO	aws/lambda.go:239	Processing Lambda request d8320256-e10a-400a-b13f-4d15fc8ad82f
+"
+1607689157387,"2020-12-11T12:19:17.385Z	INFO	aws/lambda.go:52	Will process origin_2k.jpg image
+"
+1607689157532,"2020/12/11 12:19:17 [govips.info] vips 8.10.2 started with concurrency=1 cache_max_files=0 cache_max_mem=0 cache_max=0
+"
+1607689157535,"2020/12/11 12:19:17 [govips.info] registered image type loader type=gif
+"
+1607689157535,"2020/12/11 12:19:17 [govips.info] registered image type loader type=png
+"
+1607689157535,"2020/12/11 12:19:17 [govips.info] registered image type loader type=jpeg
+"
+1607689158753,"2020-12-11T12:19:18.753Z	DEBUG	aws/lambda.go:47	Passed after Read: 254.676353ms
+"
+1607689158754,"2020-12-11T12:19:18.754Z	DEBUG	aws/lambda.go:47	Passed after Crop: 255.298723ms
+"
+1607689158754,"2020-12-11T12:19:18.754Z	DEBUG	aws/lambda.go:47	Passed after Resize: 255.325639ms
+"
+1607689158754,"2020-12-11T12:19:18.754Z	DEBUG	aws/lambda.go:47	Passed after DPR: 255.333008ms
+"
+1607689158754,"2020-12-11T12:19:18.754Z	DEBUG	aws/lambda.go:47	Passed after Sharpen: 255.338025ms
+"
+1607689158754,"2020-12-11T12:19:18.754Z	DEBUG	aws/lambda.go:47	Passed after Watermark: 255.342556ms
+"
+1607689160673,"2020-12-11T12:19:20.673Z	DEBUG	aws/lambda.go:47	Passed after Process: 2.174255114s
+"
+1607689160673,"2020-12-11T12:19:20.673Z	DEBUG	aws/lambda.go:47	Passed after UpdateBuff: 2.174316721s
+"
+1607689160673,"2020-12-11T12:19:20.673Z	INFO	aws/lambda.go:213	Writing image prc_9635ba0107338962496ae3646da9f07c3379ac4c_origin_2k.jpg to bucket ftmt-int-mordo-prc
+"
+1607689160943,"2020-12-11T12:19:20.943Z	DEBUG	aws/lambda.go:47	Passed after Write: 2.444117294s
+"
+1607689161092,"/var/task/mordo: symbol lookup error: /var/task/mordo: undefined symbol: g_type_check_instance_is_fundamentally_a
+"
+1607689161114,"2020/12/11 12:19:21 unexpected EOF
+"
+1607689161114,"2020/12/11 12:19:21 unexpected EOF
+"
+1607689161184,"END RequestId: 46fef75f-ebf0-498e-a58e-c4f2c6e9f4f8
+"
+1607689161184,"REPORT RequestId: 46fef75f-ebf0-498e-a58e-c4f2c6e9f4f8	Duration: 3799.57 ms	Billed Duration: 3800 ms	Memory Size: 128 MB	Max Memory Used: 56 MB	
+"
+1607689161184,"RequestId: 46fef75f-ebf0-498e-a58e-c4f2c6e9f4f8 Process exited before completing request
+
+"
+1607689180651,"START RequestId: b2106475-f817-4f7c-84e4-dad47a93ade2 Version: $LATEST
+"
+1607689180654,"2020-12-11T12:19:40.654Z	INFO	aws/lambda.go:239	Processing Lambda request b5522141-3113-4102-9eef-a7cf9b084204
+"
+1607689180654,"2020-12-11T12:19:40.654Z	INFO	aws/lambda.go:52	Will process origin_2k.jpg image
+"
+1607689180672,"2020/12/11 12:19:40 [govips.info] vips 8.10.2 started with concurrency=1 cache_max_files=0 cache_max_mem=0 cache_max=0
+"
+1607689180732,"2020/12/11 12:19:40 [govips.info] registered image type loader type=png
+"
+1607689180752,"2020/12/11 12:19:40 [govips.info] registered image type loader type=gif
+"
+1607689180752,"2020/12/11 12:19:40 [govips.info] registered image type loader type=jpeg
+"
+1607689181752,"2020-12-11T12:19:41.752Z	DEBUG	aws/lambda.go:47	Passed after Read: 303.640757ms
+"
+1607689181752,"2020-12-11T12:19:41.752Z	DEBUG	aws/lambda.go:47	Passed after Crop: 304.349237ms
+"
+1607689181752,"2020-12-11T12:19:41.752Z	DEBUG	aws/lambda.go:47	Passed after Resize: 304.379135ms
+"
+1607689181752,"2020-12-11T12:19:41.752Z	DEBUG	aws/lambda.go:47	Passed after DPR: 304.386989ms
+"
+1607689181752,"2020-12-11T12:19:41.752Z	DEBUG	aws/lambda.go:47	Passed after Sharpen: 304.391913ms
+"
+1607689181752,"2020-12-11T12:19:41.752Z	DEBUG	aws/lambda.go:47	Passed after Watermark: 304.396471ms
+"
+1607689183595,"2020-12-11T12:19:43.595Z	DEBUG	aws/lambda.go:47	Passed after Process: 2.147309958s
+"
+1607689183595,"2020-12-11T12:19:43.595Z	DEBUG	aws/lambda.go:47	Passed after UpdateBuff: 2.147372282s
+"
+1607689183595,"2020-12-11T12:19:43.595Z	INFO	aws/lambda.go:213	Writing image prc_9635ba0107338962496ae3646da9f07c3379ac4c_origin_2k.jpg to bucket ftmt-int-mordo-prc
+"
+1607689183854,"2020-12-11T12:19:43.854Z	DEBUG	aws/lambda.go:47	Passed after Write: 2.405686362s
+"
+1607689184112,"END RequestId: b2106475-f817-4f7c-84e4-dad47a93ade2
+"
+1607689184112,"REPORT RequestId: b2106475-f817-4f7c-84e4-dad47a93ade2	Duration: 3458.25 ms	Billed Duration: 3459 ms	Memory Size: 128 MB	Max Memory Used: 43 MB	
+"

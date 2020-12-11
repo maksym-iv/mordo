@@ -40,7 +40,6 @@ func Test_NewConfig(t *testing.T) {
 				WatermarkConfig: Watermark{
 					Path:  "foo/bar/baz/watermark",
 					Scale: 0.15,
-					// UseVips: false,
 				},
 				ImageConfig: Image{
 					Quality:     90,

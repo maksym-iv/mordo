@@ -30,3 +30,5 @@
 !helpers
 !img
 !io
+!tests
+!tests/watermark.png

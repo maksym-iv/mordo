@@ -21,7 +21,7 @@ Variables description with recommended values:
 
 * `s3_buckets = ["bucket1", "bucket2"]` - Buckets with source images.
 
-  _Note: Terraform will create CloudFront Distribution and API Gatevays per each bucket_
+  _Note: Terraform will create CloudFront Distribution and API Gateway per each bucket_
 
 * `s3_bucket_deploy = "mordo-deploy-bucket"` - Bucket to store AWS Lambda code. Used for Lambda deployment
 * `s3_bucket_prc = "bucket-images-processed"` - Bucket to store processed images.
@@ -72,7 +72,7 @@ terraform apply
 
 Terraform will create next resources
 
-* S3 Bucket for AWS La,bda deployment. Will be cleaned every day by lifecycle policy.
+* S3 Bucket for AWS Lambda deployment. Will be cleaned every day by lifecycle policy.
 * S3 Bucket for processed images
 * AWS API Gateway (1 Gateway per each bucket from `s3_buckets`)
 * AWS CloudFront (1 Gateway per each bucket from `s3_buckets`)
