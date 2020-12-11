@@ -8,9 +8,6 @@ import (
 	"reflect"
 	"testing"
 
-	// "github.com/xmackex/bimg"
-	// // "gopkg.in/h2non/bimg.v1"
-
 	"github.com/xmackex/mordo/helpers"
 )
 
@@ -119,14 +116,6 @@ func Test_ProcessWatermark(t *testing.T) {
 			scale:   0,
 			want:    helpers.ReadToBuff("../../tests/img/process/watermarked/origin_4k.webp"),
 		},
-		{
-			name:    "origin_big.webp",
-			img:     helpers.ReadToBuff("../../tests/i-webp/origin_big.webp"),
-			xString: "left",
-			yString: "center",
-			scale:   0,
-			want:    helpers.ReadToBuff("../../tests/img/process/watermarked/origin_big.webp"),
-		},
 	}
 
 	for _, tc := range testCases {
@@ -138,8 +127,6 @@ func Test_ProcessWatermark(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			// i.Resize("w", 700)
-			// i.SCrop(700, 400)
 			if err := i.Watermark(tc.xString, tc.yString, tc.scale); err != nil {
 				t.Fatal(err)
 			}
@@ -247,13 +234,6 @@ func Benchmark_ProcessWatermark(b *testing.B) {
 			img:     helpers.ReadToBuff("../../tests/i-webp/origin_4k.webp"),
 			xString: "left",
 			yString: "top",
-			scale:   0,
-		},
-		{
-			name:    "origin_big.webp",
-			img:     helpers.ReadToBuff("../../tests/i-webp/origin_big.webp"),
-			xString: "left",
-			yString: "center",
 			scale:   0,
 		},
 	}

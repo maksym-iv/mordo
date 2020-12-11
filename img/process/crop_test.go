@@ -72,15 +72,6 @@ func Test_ProcessCrop(t *testing.T) {
 			top:    1000,
 			want:   helpers.ReadToBuff("../../tests/img/process/cropped/origin_4k.webp"),
 		},
-		{
-			name:   "origin_light_big.webp",
-			img:    helpers.ReadToBuff("../../tests/i-webp/origin_light_big.webp"),
-			width:  600,
-			height: 300,
-			left:   1000,
-			top:    1000,
-			want:   helpers.ReadToBuff("../../tests/img/process/cropped/origin_light_big.webp"),
-		},
 	}
 
 	for _, tc := range testCases {
@@ -92,7 +83,6 @@ func Test_ProcessCrop(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			// i.Resize("w", 1000)
 			if err := i.Crop(tc.left, tc.top, tc.width, tc.height); err != nil {
 				t.Fatal(err)
 			}
@@ -159,14 +149,6 @@ func Benchmark_ProcessCrop(b *testing.B) {
 		{
 			name:   "origin_light_4k.webp",
 			img:    helpers.ReadToBuff("../../tests/i-webp/origin_light_4k.webp"),
-			width:  300,
-			height: 300,
-			left:   1000,
-			top:    1000,
-		},
-		{
-			name:   "origin_light_big.webp",
-			img:    helpers.ReadToBuff("../../tests/i-webp/origin_light_big.webp"),
 			width:  300,
 			height: 300,
 			left:   1000,

@@ -3,9 +3,8 @@ package config
 import (
 	"fmt"
 	"strings"
-	// "strconv"
+
 	"github.com/kelseyhightower/envconfig"
-	// "github.com/xmackex/resizer/helpers"
 )
 
 const (

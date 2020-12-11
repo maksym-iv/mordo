@@ -1,7 +1,7 @@
 package process
 
 import (
-	"github.com/davidbyttow/govips/pkg/vips"
+	"github.com/davidbyttow/govips/v2/vips"
 
 	c "github.com/xmackex/mordo/config"
 )
@@ -48,12 +48,12 @@ func (i *Image) Process() ([]byte, *string, error) {
 		Format:      i.img.Format(),
 	}
 
-	buff, imgExt, err := i.img.Export(*exportParams)
+	buff, imgExt, err := i.img.Export(exportParams)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	ext := imgExt.OutputExt()
+	ext := imgExt.Format.FileExt()
 
 	return buff, &ext, nil
 }

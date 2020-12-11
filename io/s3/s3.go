@@ -23,11 +23,11 @@ var (
 )
 
 func init() {
-	cfg, err := c.NewConfig()
+	var err error
+	config, err = c.NewConfig()
 	if err != nil {
 		panic(err)
 	}
-	config = cfg
 }
 
 type S3Img struct {

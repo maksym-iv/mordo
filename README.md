@@ -1,18 +1,18 @@
 # Table of contents
 
-1. [Description](#Description)
-2. [Why Mordo Image Service](#Why-Mordo-Image-Service)
-3. [Supported Opearations](#Supported-Opearations)
-4. [Platforms](#Platforms)
-5. [Usage](#Usage)
-    * [Routes](#Routes)
-    * [Query Strings](#Query-Strings)
-6. [Service Configuration](#Service-Configuration)
-7. [Service Setup](#Service-Setup)
-    * [AWS](setup_AWS.md)
-8. [Local Testing](#Local-Testing)
-    * [Config](#Config)
-    * [Run](#Run)
+- [Table of contents](#table-of-contents)
+  - [Description](#description)
+  - [Why Mordo Image Service](#why-mordo-image-service)
+  - [Supported Opearations](#supported-opearations)
+  - [Platforms](#platforms)
+  - [Usage](#usage)
+    - [Routes](#routes)
+    - [Query Strings](#query-strings)
+  - [Service Configuration](#service-configuration)
+  - [Service Setup](#service-setup)
+  - [Local Testing](#local-testing)
+    - [Config](#config)
+    - [Run](#run)
 
 ## Description
 
@@ -53,17 +53,17 @@ Mordo API has only one endpoint `/{image path}` exposed via:
 
 * _CloudFront_ for _AWS_
 
-For testing purposes `/process` AWS Api Gateway endpoint is available. This endpoint won't cache resulting image at theedge locations.
+For testing purposes `/process` AWS Api Gateway endpoint is available. This endpoint won't cache resulting image at the edge locations.
 
 ### Query Strings
 
 Image operations are defined by query string passed to endpoint.
 
-1. `width`/`heigth` **Resize** - use one to define new size of the image. For example:
+1. `width`/`height` **Resize** - use one to define new size of the image. For example:
 
     Usage examples:
     * `https://demo.mordo.io/origin_2k.jpg?width=1000`
-    * `https://demo.mordo.io/origin_2k.jpg?heigth=1000`
+    * `https://demo.mordo.io/origin_2k.jpg?height=1000`
 
 2. `dpr` - set Dual Pixel Ratio, number. It is kind of resize, but act like scale factor. Vaules: `0` - `infinity`.
 
@@ -72,27 +72,9 @@ Image operations are defined by query string passed to endpoint.
 
     _Note: Please avoid using with **Resize** operation, cause under the hood **DPR** and **Resize** is almost same operation and modifies image in same way_
 
-    _Note: If `dpr` > 1 image will be enlarged. Enlargin is heavy opertion_
+    _Note: If `dpr` > 1 image will be enlarged. Enlarging is heavy operation_
 
-3. `c_top`, `c_left`, `c_x`, `c_y` **Smart Crop** - used to define `Top`, `Left` position and `X`, `Y` axes of **Smart Crop** operation
-
-    `c_top`, `c_left` - top and left postition to crop.
-
-    `c_x`, `c_y` - size of picture after crop.
-
-    Usage examples:
-    * `https://demo.mordo.io/origin_2k.jpg?c_top=500&c_left=700&c_x=400&c_y=700` - crop 400x700 image
-    * `https://demo.mordo.io/origin_2k.jpg?width=1000&c_top=500&c_left=700&c_x=400&c_y=700` - resize image to 1000 px by **width** and crop to 400x700
-
-4. `sc_x`, `sc_y` **Smart Crop** - used to define `X`, `Y` axes of **Smart Crop** operation
-
-    `sc_x`, `sc_y` - size of picture after crop.
-
-    Usage examples:
-    * `https://demo.mordo.io/origin_2k.jpg?sc_x=400&sc_y=700` - crop 400x700 image
-    * `https://demo.mordo.io/origin_2k.jpg?width=1000&sc_x=400&sc_y=700` - resize image to 1000 px by **width** and crop to 400x700
-
-5. `w_x`, `w_y`, `w_s` **Watermark** - use to define watermark position and watermark scale.
+3. `w_x`, `w_y`, `w_s` **Watermark** - use to define watermark position and watermark scale.
 
     `w_x` - position by X axis, string, required parameter. Available values:
     * `right`
@@ -104,7 +86,7 @@ Image operations are defined by query string passed to endpoint.
     * `bottom`
     * `center`
 
-      `w_s` - watermarkscale factor, number, optional paramter. Vaules: `0` - `infinity`.
+      `w_s` - watermark scale factor, number, optional parameter. Values: `0` - `infinity`.
 
       _Note: setting `w_s` value more than `1` will have severe impact on performance._
 
@@ -113,7 +95,7 @@ Image operations are defined by query string passed to endpoint.
     * `https://demo.mordo.io/origin_2k.jpg?w_x=right&w_y=center&w_s=0.5` - watermark to right by X, center by Y
     * `https://demo.mordo.io/origin_2k.jpg?width=1000&w_x=right&w_y=center` - resize image to 1000 px by **width** watermark to right by **X**, center by **Y**, scale watermark to **50%** of original size.
 
-6. `sharpen` - **Sharpen operation** - use to apply sharpening to image. Vaules: `t` - apply sharpening.
+4. `sharpen` - **Sharpen operation** - use to apply sharpening to image. Vaules: `t` - apply sharpening.
 
     Predefined sharpening params:
     * `radius`: 1 - Gaussian Blur radius for high-frequency signal

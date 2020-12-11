@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/davidbyttow/govips/pkg/vips"
+	"github.com/davidbyttow/govips/v2/vips"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -51,13 +51,13 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 	timeStart := time.Now()
 
 	vips.Startup(&vips.Config{
-		// ConcurrencyLevel: 4,
-		MaxCacheFiles: 100,
-		MaxCacheMem:   config.MaxMem,
-		MaxCacheSize:  500,
-		ReportLeaks:   false,
-		CacheTrace:    false,
-		CollectStats:  false,
+		ConcurrencyLevel: 4,
+		MaxCacheFiles:    100,
+		MaxCacheMem:      config.MaxMem,
+		MaxCacheSize:     500,
+		ReportLeaks:      false,
+		CacheTrace:       false,
+		CollectStats:     false,
 	})
 
 	qss, err := newQs(image, qs)
@@ -125,6 +125,7 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 
 	// START transform
 	s3Img.Read()
+
 	timer(timeStart, "Read") // DEBUGG
 	img, err := p.New(s3Img.Buff)
 	if err != nil {
@@ -134,23 +135,15 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 		return r, e
 	}
 
-	if qss.SCrop.Width != 0 && qss.SCrop.Heigth != 0 {
-		if err := img.SCrop(qss.SCrop.Width, qss.SCrop.Heigth); err != nil {
+	if qss.Crop.Width != 0 && qss.Crop.Height != 0 {
+		if err := img.Crop(qss.Crop.Left, qss.Crop.Top, qss.Crop.Width, qss.Crop.Height); err != nil {
 			log.Error(err)
 			e := newErr(err.Error())
 			r := response(e.ErrorJSON(), 500, map[string]string{"Content-Type": "application/json"})
 			return r, e
 		}
 	}
-	timer(timeStart, "SCrop") // DEBUGG
-	if qss.Crop.Width != 0 && qss.Crop.Heigth != 0 {
-		if err := img.Crop(qss.Crop.Left, qss.Crop.Top, qss.Crop.Width, qss.Crop.Heigth); err != nil {
-			log.Error(err)
-			e := newErr(err.Error())
-			r := response(e.ErrorJSON(), 500, map[string]string{"Content-Type": "application/json"})
-			return r, e
-		}
-	}
+
 	timer(timeStart, "Crop") // DEBUGG
 	if qss.Resize.Width != 0 {
 		if err := img.Resize("width", qss.Resize.Width); err != nil {
@@ -159,34 +152,36 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 			r := response(e.ErrorJSON(), 404, map[string]string{"Content-Type": "application/json"})
 			return r, e
 		}
-	} else if qss.Resize.Heigth != 0 {
-		if err := img.Resize("heigth", qss.Resize.Heigth); err != nil {
+	} else if qss.Resize.Height != 0 {
+		if err := img.Resize("height", qss.Resize.Height); err != nil {
 			log.Error(err)
 			e := newErr(err.Error())
 			r := response(e.ErrorJSON(), 500, map[string]string{"Content-Type": "application/json"})
 			return r, e
 		}
 	}
+
 	timer(timeStart, "Resize") // DEBUGG
 	if qss.DPR != 0 {
 		img.DPR(qss.DPR)
 	}
+
 	timer(timeStart, "DPR") // DEBUGG
 	if qss.Sharpen {
 		log.Infof("Will sharpen: %s", s3Img.Path)
 		// http://jcupitt.github.io/libvips/API/current/libvips-convolution.html#vips-sharpen
-		// if err := img.Sharpen(1, 2, 5, 10, 0, 3); err != nil {
-		if err := img.Sharpen(1, 2, 1, 5, 0, 3); err != nil {
+		if err := img.Sharpen(1, 2, 3); err != nil {
 			log.Error(err)
 			e := newErr(err.Error())
 			r := response(e.ErrorJSON(), 500, map[string]string{"Content-Type": "application/json"})
 			return r, e
 		}
 	}
+
 	timer(timeStart, "Sharpen") // DEBUGG
 	if qss.Watermark.WX != "" && qss.Watermark.WY != "" && config.WatermarkEnabled {
 		var err error
-		if err = img.Watermark(qss.WX, qss.WY, qss.WS); err != nil {
+		if err = img.Watermark(qss.Watermark.WX, qss.Watermark.WY, qss.Watermark.WS); err != nil {
 			log.Error(err)
 			e := newErr(err.Error())
 			r := response(e.ErrorJSON(), 500, map[string]string{"Content-Type": "application/json"})
@@ -216,7 +211,6 @@ func process(image string, qs map[string]string, stageVars map[string]string) (*
 	}
 	timer(timeStart, "Write") // DEBUGG
 
-	// r := response(
 	r := &events.APIGatewayProxyResponse{
 		StatusCode: 200,
 		Headers: map[string]string{

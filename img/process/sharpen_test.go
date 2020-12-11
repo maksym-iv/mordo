@@ -5,8 +5,6 @@ package process
 import (
 	"fmt"
 	"io/ioutil"
-	// "fmt"
-	// "io/ioutil"
 	"reflect"
 	"testing"
 
@@ -19,9 +17,6 @@ func Test_ProcessSharpen(t *testing.T) {
 		img    []byte
 		radius float64
 		X1     float64
-		Y2     float64
-		Y3     float64
-		M1     float64
 		M2     float64
 		want   []byte
 	}{
@@ -30,9 +25,6 @@ func Test_ProcessSharpen(t *testing.T) {
 			img:    helpers.ReadToBuff("../../tests/i-jpg/origin_2k.jpg"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 			want:   helpers.ReadToBuff("../../tests/img/process/sharpened/origin_2k.jpg"),
 		},
@@ -41,9 +33,6 @@ func Test_ProcessSharpen(t *testing.T) {
 			img:    helpers.ReadToBuff("../../tests/i-jpg/origin_4k.jpg"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 			want:   helpers.ReadToBuff("../../tests/img/process/sharpened/origin_4k.jpg"),
 		},
@@ -52,9 +41,6 @@ func Test_ProcessSharpen(t *testing.T) {
 			img:    helpers.ReadToBuff("../../tests/i-jpg/origin_big.jpg"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 			want:   helpers.ReadToBuff("../../tests/img/process/sharpened/origin_big.jpg"),
 		},
@@ -63,9 +49,6 @@ func Test_ProcessSharpen(t *testing.T) {
 			img:    helpers.ReadToBuff("../../tests/i-png/origin_2k.png"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 			want:   helpers.ReadToBuff("../../tests/img/process/sharpened/origin_2k.png"),
 		},
@@ -74,9 +57,6 @@ func Test_ProcessSharpen(t *testing.T) {
 			img:    helpers.ReadToBuff("../../tests/i-webp/origin_2k.webp"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 			want:   helpers.ReadToBuff("../../tests/img/process/sharpened/origin_2k.webp"),
 		},
@@ -85,22 +65,8 @@ func Test_ProcessSharpen(t *testing.T) {
 			img:    helpers.ReadToBuff("../../tests/i-webp/origin_4k.webp"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 			want:   helpers.ReadToBuff("../../tests/img/process/sharpened/origin_4k.webp"),
-		},
-		{
-			name:   "origin_big.webp",
-			img:    helpers.ReadToBuff("../../tests/i-webp/origin_big.webp"),
-			radius: 1,
-			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
-			M2:     3,
-			want:   helpers.ReadToBuff("../../tests/img/process/sharpened/origin_big.webp"),
 		},
 	}
 
@@ -113,7 +79,7 @@ func Test_ProcessSharpen(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if err := i.Sharpen(tc.radius, tc.X1, tc.Y2, tc.Y3, tc.M1, tc.M2); err != nil {
+			if err := i.Sharpen(tc.radius, tc.X1, tc.M2); err != nil {
 				t.Fatal(err)
 			}
 
@@ -136,9 +102,6 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 		img    []byte
 		radius float64
 		X1     float64
-		Y2     float64
-		Y3     float64
-		M1     float64
 		M2     float64
 	}{
 		{
@@ -146,9 +109,6 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 			img:    helpers.ReadToBuff("../../tests/i-jpg/origin_2k.jpg"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 		},
 		{
@@ -156,9 +116,6 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 			img:    helpers.ReadToBuff("../../tests/i-jpg/origin_4k.jpg"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 		},
 		{
@@ -166,9 +123,6 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 			img:    helpers.ReadToBuff("../../tests/i-jpg/origin_big.jpg"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 		},
 		{
@@ -176,9 +130,6 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 			img:    helpers.ReadToBuff("../../tests/i-png/origin_2k.png"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 		},
 		{
@@ -186,9 +137,6 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 			img:    helpers.ReadToBuff("../../tests/i-webp/origin_2k.webp"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 		},
 		{
@@ -196,19 +144,6 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 			img:    helpers.ReadToBuff("../../tests/i-webp/origin_4k.webp"),
 			radius: 1,
 			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
-			M2:     3,
-		},
-		{
-			name:   "origin_big.webp",
-			img:    helpers.ReadToBuff("../../tests/i-webp/origin_big.webp"),
-			radius: 1,
-			X1:     2,
-			Y2:     1,
-			Y3:     5,
-			M1:     0,
 			M2:     3,
 		},
 	}
@@ -227,7 +162,7 @@ func Benchmark_ProcessSharpen(b *testing.B) {
 				}
 				b.StartTimer()
 
-				if err := i.Sharpen(tc.radius, tc.X1, tc.Y2, tc.Y3, tc.M1, tc.M2); err != nil {
+				if err := i.Sharpen(tc.radius, tc.X1, tc.M2); err != nil {
 					b.Fatal(err)
 				}
 

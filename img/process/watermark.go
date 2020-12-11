@@ -3,7 +3,7 @@ package process
 import (
 	"math"
 
-	"github.com/davidbyttow/govips/pkg/vips"
+	"github.com/davidbyttow/govips/v2/vips"
 )
 
 func setX(main int, sub int, side string) int {
@@ -50,46 +50,45 @@ func setY(main int, sub int, side string) int {
 // 	x: left, right, center
 // 	y: top, bottom, center
 func (i *Image) Watermark(xString string, yString string, scale float64) error {
-	// var err error
-	// var timeNow time.Time
-	// var timePassed time.Duration
-	// timeStart := time.Now()
-	// timeNow = time.Now()
-	// timePassed = timeNow.Sub(timeStart)
-	// log.Debugf("Passed after validateQS: %v", timePassed)
-
-	imgSub, err := vips.NewImageFromFile(config.WatermarkConfig.Path)
+	imgOverlay, err := vips.NewImageFromFile(config.WatermarkConfig.Path)
 	if err != nil {
 		return err
 	}
-
-	imgSubTransform := vips.NewTransform().Quality(100).Compression(0).Lossless()
-	imgSubTransform.Image(imgSub)
 
 	// scale watermark according to config.WatermarkConfig.Scale.
+	// TODO: put `imgOverlay.Resize` out of `if` scope
 	if scale != 0 {
-		imgSubWidth := int(math.Round(float64(i.img.Width()) * config.WatermarkConfig.Scale * scale))
-		imgSubTransform.ResizeWidth(imgSubWidth)
+		s := math.Round(float64(config.WatermarkConfig.Scale * scale))
+		imgOverlay.Resize(s, vips.KernelAuto)
 	} else {
-		imgSubWidth := int(math.Round(float64(i.img.Width()) * config.WatermarkConfig.Scale))
-		imgSubTransform.ResizeWidth(imgSubWidth)
+		s := math.Round(float64(config.WatermarkConfig.Scale))
+		imgOverlay.Resize(s, vips.KernelAuto)
 	}
 
-	imgSubBuff, _, err := imgSubTransform.Apply()
+	// TODO: Put this struct somewhere, name it `exportParamsHQ` and re-use it.
+	exportParams := &vips.ExportParams{
+		Quality:     100,
+		Compression: 0,
+		Lossless:    true,
+		Format:      imgOverlay.Format(),
+	}
+
+	imgOverlayBuff, _, err := imgOverlay.Export(exportParams)
 	if err != nil {
 		return err
 	}
-	imgSub, err = vips.NewImageFromBuffer(imgSubBuff)
+	imgOverlay, err = vips.NewImageFromBuffer(imgOverlayBuff)
 	if err != nil {
 		return err
 	}
 
 	// Define X, Y of for watermark position
-	imgSubX := setX(i.img.Width(), imgSub.Width(), xString)
-	imgSubY := setY(i.img.Height(), imgSub.Height(), yString)
-	err = imgSub.Embed(imgSubX, imgSubY, i.img.Width(), i.img.Height())
+	imgOverlayX := setX(i.img.Width(), imgOverlay.Width(), xString)
+	imgOverlayY := setY(i.img.Height(), imgOverlay.Height(), yString)
 
-	i.img.Composite(imgSub, vips.BlendModeOver)
+	if err := i.img.Composite(imgOverlay, vips.BlendModeOver, imgOverlayX, imgOverlayY); err != nil {
+		return err
+	}
 
 	return nil
 }

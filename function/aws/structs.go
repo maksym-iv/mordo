@@ -9,30 +9,25 @@ import (
 	ms "github.com/mitchellh/mapstructure"
 )
 
+// QS Query String
 type QS struct {
-	// resize Resize `mapstructure:",squash"`
 	Image     string
-	Resize    Resize `mapstructure:",squash"`
-	Watermark `mapstructure:",squash"`
-	SCrop     SCrop `mapstructure:",squash"`
-	Crop      Crop  `mapstructure:",squash"`
+	Resize    Resize    `mapstructure:",squash"`
+	Watermark Watermark `mapstructure:",squash"`
+	Crop      Crop      `mapstructure:",squash"`
 	DPR       float64
 	Sharpen   bool
 }
 
 type Resize struct {
 	Width  int
-	Heigth int
-}
-type SCrop struct {
-	Width  int `mapstructure:"sc_x"`
-	Heigth int `mapstructure:"sc_y"`
+	Height int
 }
 type Crop struct {
-	Left   int `mapstructure:"c_top"`
-	Top    int `mapstructure:"c_left"`
+	Left   int `mapstructure:"c_left"`
+	Top    int `mapstructure:"c_top"`
 	Width  int `mapstructure:"c_x"`
-	Heigth int `mapstructure:"c_y"`
+	Height int `mapstructure:"c_y"`
 }
 type Watermark struct {
 	WX string  `mapstructure:"w_x"`
@@ -43,8 +38,6 @@ type Watermark struct {
 func newQs(image string, qs map[string]string) (*QS, error) {
 	result := &QS{}
 	result.Image = image
-
-	// qsi := atoiface(qs)
 
 	config := &ms.DecoderConfig{
 		WeaklyTypedInput: true,
@@ -64,8 +57,6 @@ func newQs(image string, qs map[string]string) (*QS, error) {
 }
 
 func (qss *QS) hashPath() string {
-	// m := structs.Map(qss)
-	// elements := []byte(fmt.Sprintf("%v", qss))
 	elements := append([]byte(fmt.Sprintf("%v", *qss)), []byte(fmt.Sprintf("%v", *config))...)
 
 	h := sha1.New()
@@ -73,8 +64,8 @@ func (qss *QS) hashPath() string {
 
 	p := hex.EncodeToString(h.Sum(nil))
 	p = fmt.Sprintf("prc_%v_%v", p, qss.Image)
-	return p
 
+	return p
 }
 
 // errorJSON Custom error type with JSON marshaling

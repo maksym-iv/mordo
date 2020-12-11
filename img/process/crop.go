@@ -12,7 +12,7 @@ func (i *Image) Crop(left, top, width, height int) error {
 		height = i.img.Height()
 	}
 
-	// set left and top to crop img.With - crop.Width, img.Letght - crop.Letght if left, tom more than image width or lenght
+	// set left and top to crop img.With - crop.Width, img.Length - crop.Length if left, tom more than image width or length
 	if left+width > i.img.Width() {
 		left = i.img.Width() - width
 	}

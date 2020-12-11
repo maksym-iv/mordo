@@ -21,8 +21,6 @@ func Test_newQs(t *testing.T) {
 				"w_y":     "bottom",
 				"dpr":     "2",
 				"sharpen": "t",
-				"sc_x":    "600",
-				"sc_y":    "300",
 				"c_left":  "300",
 				"c_top":   "400",
 				"c_x":     "200",
@@ -32,8 +30,7 @@ func Test_newQs(t *testing.T) {
 				Image:     "origin_2k.jpg",
 				Resize:    Resize{Width: 101},
 				Watermark: Watermark{WX: "right", WY: "bottom"},
-				SCrop:     SCrop{Width: 600, Heigth: 300},
-				Crop:      Crop{Left: 300, Top: 400, Width: 200, Heigth: 600},
+				Crop:      Crop{Left: 300, Top: 400, Width: 200, Height: 600},
 				DPR:       2,
 				Sharpen:   true,
 			},
@@ -71,7 +68,7 @@ func Test_hashQss(t *testing.T) {
 				DPR:       2,
 				Sharpen:   true,
 			},
-			want: "prc_5112ac2e71dcfe5de42c580b0a01089106231d53_origin_2k.jpg",
+			want: "prc_27d3ab294961482c633449a789c9dd62e289366c_origin_2k.jpg",
 		},
 		{
 			name: "origin_2k.jpg 200",
@@ -82,7 +79,7 @@ func Test_hashQss(t *testing.T) {
 				DPR:       2,
 				Sharpen:   true,
 			},
-			want: "prc_f98fe55fc7400ab17577c16e54544e09c884931a_origin_2k.jpg",
+			want: "prc_7787e2d6bb5605e5d1e2ee2ae64057f087e56343_origin_2k.jpg",
 		},
 	}
 
@@ -103,7 +100,6 @@ func Benchmark_newPath(b *testing.B) {
 	testCases := []struct {
 		name string
 		qss  *QS
-		want string
 	}{
 		{
 			name: "origin_2k.jpg",
@@ -114,13 +110,6 @@ func Benchmark_newPath(b *testing.B) {
 				DPR:       2,
 				Sharpen:   true,
 			},
-			// want: &QS{
-			// 	Image:     "origin_2k.jpg",
-			// 	Resize:    Resize{Width: 101},
-			// 	Watermark: Watermark{WX: "right", WY: "bottom"},
-			// 	DPR:       2,
-			// 	Sharpen:   true,
-			// },
 		},
 	}
 

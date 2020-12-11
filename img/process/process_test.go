@@ -72,11 +72,6 @@ func Test_Process(t *testing.T) {
 			img:  helpers.ReadToBuff("../../tests/i-webp/origin_4k.webp"),
 			want: helpers.ReadToBuff("../../tests/img/process/processed/origin_4k.webp"),
 		},
-		{
-			name: "origin_big.webp",
-			img:  helpers.ReadToBuff("../../tests/i-webp/origin_big.webp"),
-			want: helpers.ReadToBuff("../../tests/img/process/processed/origin_big.webp"),
-		},
 	}
 
 	for _, tc := range testCases {
@@ -91,7 +86,7 @@ func Test_Process(t *testing.T) {
 			if got, _, err := i.Process(); err != nil {
 				t.Fatal(err)
 			} else if !reflect.DeepEqual(got, tc.want) {
-				t.Error("Resized image is not eq with test image")
+				t.Error("Processed image is not eq with test image")
 				t.Error("Will write images to ../../tmp/ for further checks")
 				p := fmt.Sprintf("../../tmp/%s", tc.name)
 				ioutil.WriteFile(p, got, 0644)
@@ -129,10 +124,6 @@ func Benchmark_Process(b *testing.B) {
 		{
 			name: "origin_4k.webp",
 			img:  helpers.ReadToBuff("../../tests/i-webp/origin_4k.webp"),
-		},
-		{
-			name: "origin_big.webp",
-			img:  helpers.ReadToBuff("../../tests/i-webp/origin_big.webp"),
 		},
 	}
 

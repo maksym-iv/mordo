@@ -48,18 +48,6 @@ func Test_ProcessDPR(t *testing.T) {
 			ratio: 2,
 			want:  helpers.ReadToBuff("../../tests/img/process/DPRed/origin_2k.webp"),
 		},
-		{
-			name:  "origin_4k.webp",
-			img:   helpers.ReadToBuff("../../tests/i-webp/origin_4k.webp"),
-			ratio: 2.5,
-			want:  helpers.ReadToBuff("../../tests/img/process/DPRed/origin_4k.webp"),
-		},
-		{
-			name:  "origin_light_big.webp",
-			img:   helpers.ReadToBuff("../../tests/i-webp/origin_light_big.webp"),
-			ratio: 2.5,
-			want:  helpers.ReadToBuff("../../tests/img/process/DPRed/origin_light_big.webp"),
-		},
 	}
 
 	for _, tc := range testCases {
@@ -122,11 +110,6 @@ func Benchmark_ProcessDPR(b *testing.B) {
 		{
 			name:  "origin_4k.webp",
 			img:   helpers.ReadToBuff("../../tests/i-webp/origin_4k.webp"),
-			ratio: 2.5,
-		},
-		{
-			name:  "origin_big.webp",
-			img:   helpers.ReadToBuff("../../tests/i-webp/origin_big.webp"),
 			ratio: 2.5,
 		},
 	}
