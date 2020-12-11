@@ -41,10 +41,10 @@ type S3Img struct {
 }
 
 // NewImg - Init image obj with image path, image path basename, image name.
-func NewImg(bucket string, imgpath string, region string) (*S3Img, error) {
+func NewImg(bucket string, imgPath string, region string) (*S3Img, error) {
 	img := &S3Img{}
 	img.Img = &base.Img{}
-	img.Path = path.Clean(imgpath)
+	img.Path = path.Clean(imgPath)
 	img.Bucket = bucket
 	img.Region = region
 	img.DirPath = path.Dir(img.Path)
@@ -72,11 +72,11 @@ func NewImg(bucket string, imgpath string, region string) (*S3Img, error) {
 	return img, nil
 }
 
-// IsExist - check if imgpath exist in bucket
-func (i *S3Img) IsExist(bucket string, imgpath string) (bool, error) {
+// IsExist - check if imgPath exist in bucket
+func (i *S3Img) IsExist(bucket string, imgPath string) (bool, error) {
 	headInput := &s3.HeadObjectInput{
 		Bucket: aws.String(bucket),
-		Key:    aws.String(imgpath),
+		Key:    aws.String(imgPath),
 	}
 
 	if head, err := i.svc.HeadObject(headInput); head.ContentLength == nil {
